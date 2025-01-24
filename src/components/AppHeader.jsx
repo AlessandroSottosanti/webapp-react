@@ -4,7 +4,7 @@ function AppHeader() {
     const navLinks = [
         {
             path: '/',
-            title: 'home'
+            title: 'Home'
         },
         {
             path: '/movies',
@@ -13,7 +13,7 @@ function AppHeader() {
     ]
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary ">
+            <nav className="navbar navbar-dark navbar-expand-lg bg-dark header-shadow">
                 <div className="container-fluid ">
                     <a className="navbar-brand" href="#">Navbar</a>
                     <div className="nav-links d-flex justify-content-center">

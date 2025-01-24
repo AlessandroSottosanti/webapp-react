@@ -1,7 +1,7 @@
 function AppFooter() {
     return (
         <>
-            <nav className="navbar bg-body-tertiary">
+            <nav className="navbar navbar-dark navbar-expand-lg bg-dark">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">Footer</a>
                 </div>
