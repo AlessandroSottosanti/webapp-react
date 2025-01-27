@@ -46,13 +46,13 @@ function SingleMoviePage() {
                             <h1>{movie.title}</h1>
                             <p>{movie.abstract}</p>
                             <span className="d-flex flex-row gap-3 rating">Voto:
-                                <div >
-                                    {stars.map((star) => {
+                                <div>
+                                    {stars.map((star, index) => {
                                         const voteAvg = Math.ceil(movie.vote_avg);
                                         if (star <= voteAvg) {
-                                            return (<i className="fa-solid fa-star"></i>)
+                                            return (<i key={index} className="fa-solid fa-star"></i>)
                                         }
-                                        return (<i className="fa-regular fa-star"></i>)
+                                        return (<i key={index} className="fa-regular fa-star"></i>)
                                     })}
                                 </div>
                             </span>
@@ -61,13 +61,15 @@ function SingleMoviePage() {
 
                     <section className="d-flex flex-column container">
                         <h2>Recensioni</h2>
-                        { movie.reviews && movie.reviews.map((review) => { 
-                            <ReviewCard
-                            reviews={review}
-                            key={review.id}
-                        />
-                        })}
-                        
+                        <div className="d-flex flex-column gap-3 my-3">
+                            {movie.reviews && movie.reviews.map((review) => (
+                                <ReviewCard
+                                    review={review}
+                                />
+                            ))}
+                        </div>
+
+
                     </section>
                 </>
             )}

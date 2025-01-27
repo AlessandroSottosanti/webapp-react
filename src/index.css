@@ -57,6 +57,10 @@ a.nav-link:hover {
     font-size: 1.5rem;
 }
 
+.fa-star {
+    color: yellowgreen;
+}
+
 .img-container{
     max-width: 600px;
 }
