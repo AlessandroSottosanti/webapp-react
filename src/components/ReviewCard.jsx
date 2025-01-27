@@ -1,8 +1,9 @@
 function ReviewCard({review}) {
+    console.log("review:", review);
     return (
         <div className="card">
             <div className="card-content">
-                {review}
+                <h1>{review.name}</h1>
             </div>
         </div>
     )
