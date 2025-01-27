@@ -30,6 +30,12 @@ a.nav-link:hover {
     color: #0D6EFD;
 }
 
+.arrow {
+    font-size: 20px;
+    line-height: 1;
+    font-weight: bold;
+}
+
 .card {
     border-radius: 5px;
     cursor: pointer;
@@ -45,6 +51,14 @@ a.nav-link:hover {
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
 
+}
+
+.img-container{
+    max-width: 600px;
+}
+
+.img-container img{
+    width: 100%;
 }
 
 @media (min-width: 576px) {

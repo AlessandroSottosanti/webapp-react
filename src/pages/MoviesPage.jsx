@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function MoviesPage() {
-    const apiUrl = "http://localhost:3000";
-
     const [movies, setMovies] = useState([]);
     const [search, setSearch] = useState('');
     const [genre, setGenre] = useState('all');
@@ -33,9 +32,7 @@ function MoviesPage() {
             },
         }).then((resp) => {
             const fetchedMovies = resp.data.data;
-            setMovies(fetchedMovies);
-             
-            getGenresAndYears(fetchedMovies);        
+            setMovies(fetchedMovies);             
         }).catch((err) => {
             console.log("Errore nel caricamento dei film", err);
         });
