@@ -3,21 +3,35 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReviewCard from "../components/ReviewCard";
 import { useNavigate } from "react-router-dom";
+import ReviewForm from "../components/ReviewForm";
 
 const apiUrl = import.meta.env.VITE_API_URL;
+
+const initilaData = {
+    name: "",
+    vote: 1,
+    text: "",
+}
 
 function SingleMoviePage() {
     const { slug } = useParams();
 
     const [movie, setMovie] = useState(null);
 
+    const [formData, setFormData] = useState(initilaData)
+    const [showAlert, setShowAlert] = useState(false); 
+
+
     const navigate = useNavigate();
 
-
-    useEffect(() => {
+    const getMovieDetails = () => {
         axios.get(`${apiUrl}/movies/${slug}`).then((resp) => {
             setMovie(resp.data.data);
         })
+    }
+
+    useEffect(() => {
+        getMovieDetails();
     }, []);
 
     const stars = [];
@@ -26,7 +40,47 @@ function SingleMoviePage() {
         stars.push(i);
     }
 
-    console.log(stars);
+
+    const handleChange = (event) => {
+        let { name, value } = event.target;
+        
+        if(name === "vote"){
+            value = parseInt(value);
+        }
+
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault(); // Evita il refresh della pagina
+
+        if (
+            formData.name.length <= 3 ||
+            isNaN(formData.vote) ||
+            formData.vote < 0 ||
+            formData.vote > 5 ||
+            (formData.text && formData.text.trim().length > 0 && formData.text.trim().length < 5)
+        ) {
+            setShowAlert(true); // Mostra l'alert
+            return;
+        }
+        console.log('review:', formData);
+
+        axios.post(`${apiUrl}/movies/${movie.id}`, formData)
+            .then((resp) => {
+                setFormData(initilaData);
+                getMovieDetails();
+                console.log(resp);
+                setShowAlert(false);
+            }) .catch((err) => {
+                console.error("Errore:", err);
+                setShowAlert(true);
+
+            });
+    };
 
     return (
         <>
@@ -59,11 +113,25 @@ function SingleMoviePage() {
                         </div>
                     </section>
 
-                    <section className="d-flex flex-column container">
+                    <section>
+                        <ReviewForm
+
+                            formData={formData}
+                            setFormData={setFormData}
+                            initilaData={initilaData}
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                            showAlert={showAlert}
+                            setShowAlert={setShowAlert}
+                        />
+                    </section>
+
+                    <section className="d-flex flex-column container mt-4">
                         <h2>Recensioni</h2>
-                        <div className="d-flex flex-column gap-3 my-3">
+                        <div className="d-flex flex-column gap-4 my-4">
                             {movie.reviews && movie.reviews.map((review) => (
                                 <ReviewCard
+                                    key={review.id}
                                     review={review}
                                 />
                             ))}

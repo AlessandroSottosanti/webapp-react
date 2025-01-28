@@ -5,9 +5,8 @@ function ReviewCard({ review }) {
         stars.push(i);
     }
 
-    console.log("review in ReviewCard:", review);
     return (
-        <div key={review.id} className="card container p-3">
+        <div className="card container p-3 my-3">
             <div className="card-content d-flex flex-column gap-3">
                 <h2>{review.name}</h2>
                 <span className="rating">{stars.map((star, index) => {
