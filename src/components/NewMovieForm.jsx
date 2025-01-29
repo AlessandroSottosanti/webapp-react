@@ -1,5 +1,5 @@
 
-const NewMovieForm = ({ handleChange, handleSubmit, formData }) => {
+const NewMovieForm = ({ handleChange, handleSubmit, formData, preview }) => {
     return (
         <>
             <form onSubmit={handleSubmit} className="p-4 bg-dark card-no-hover">
@@ -22,6 +22,15 @@ const NewMovieForm = ({ handleChange, handleSubmit, formData }) => {
                 <div className="mb-3">
                     <label htmlFor="image" className="form-label">Cover Film</label>
                     <input type="file" name="image" className="form-control" onChange={handleChange} required />
+
+                    {/* Mostra il link per scaricare l'immagine selezionata */}
+                    {( preview) && (
+                        <div className="mt-2">
+                            <a href={preview} download={formData.image.name} className="btn btn-secondary">
+                            <i className="fa-solid fa-download"></i> {formData.image.name}
+                            </a>
+                        </div>
+                    )}
                 </div>
                 <div className="mb-3">
                     <label htmlFor="abstract" className="form-label">Descrizione</label>

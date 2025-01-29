@@ -18,12 +18,21 @@ const NewMoviePage = () => {
     }
 
     const [formData, setFormData] = useState(initialData);
+    const [preview, setPreview] = useState(null);
     
       const handleChange = (e) => {
         const { name, value, type } = e.target;
 
-        if( type === "file" ) {
-            setFormData({ ...formData, image: e.target.files[0] });
+        if( type === "file"  ) {
+            const file = e.target.files[0];
+            if (preview) {
+                URL.revokeObjectURL(preview);
+              }
+
+            setFormData({ ...formData, image: file });
+            
+            const objectUrl = URL.createObjectURL(file);
+            setPreview(objectUrl);
         }
 
         else {
@@ -74,6 +83,7 @@ const NewMoviePage = () => {
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         formData={formData}
+                        preview={preview}
                         />
                     </div>
                 </div>
