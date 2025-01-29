@@ -21,9 +21,7 @@ function AppHeader() {
                             <NavLink key={index} className="nav-link m-3" to={link.path}>{link.title}</NavLink>
                         ))}
                     </div>
-                    <div className="d-flex gap-2">
-                        <input className="form-control" type="search" placeholder="Cerca un film.." />
-                        <button className="btn btn-primary">Cerca</button>
+                    <div className="">
                     </div>
                 </div>
             </nav>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
+import { Link } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function MoviesPage() {
@@ -105,6 +106,8 @@ function MoviesPage() {
                     <button className="btn btn-secondary" onClick={resetFilters}>Resetta Filtri</button>
 
                 </div>
+
+                <Link to={`/new-movie`} className="btn btn-primary mt-3">+ Aggiungi Film</Link>
 
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 my-5">
                     {movies.length !== 0 ? movies.map((movie) => (
