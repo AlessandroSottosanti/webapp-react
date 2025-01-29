@@ -1,21 +1,11 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { Link } from "react-router-dom";
-const apiUrl = import.meta.env.VITE_API_URL;
+import { MoviesContext } from "../contexts/MoviesContext";
 
 function MoviesPage() {
-    const [movies, setMovies] = useState([]);
-    const [search, setSearch] = useState('');
-    const [genre, setGenre] = useState('all');
-    const [releaseYear, setReleaseYear] = useState('all');
-
-    const [releaseYears, setReleaseYears] = useState([]);
-
-    const [allGenres, setAllGenres] = useState([]);
-    const [genres, setGenres] = useState([allGenres]);
-    const [allReleaseYears, setAllReleaseYears] = useState([]);
-
+   
+    const {getMovies, getGenres, getReleaseYear, handleGenreChange, handleReleaseYearChange, resetFilters, handleEnterKey, movies, search, setSearch, genre, releaseYear, allReleaseYears, allGenres} = useContext(MoviesContext);
 
     useEffect(() => {
         getMovies();
@@ -23,59 +13,7 @@ function MoviesPage() {
         getReleaseYear();
     }, [genre, releaseYear]);
 
-    const getMovies = () => {
-        // Per gestire nuovi filtri sui film sarà necessario inserirli qui, dato che il BE li gestirà dinamicamente sfruttando le Key
-        axios.get(`${apiUrl}/movies`, {
-            params: {
-                ...(search && { search }), 
-                ...(genre !== 'all' && { genre }),
-                ...(releaseYear !== 'all' && { release_year: releaseYear })
-            },
-        }).then((resp) => {
-            const fetchedMovies = resp.data.data;
-            setMovies(fetchedMovies);             
-        }).catch((err) => {
-            console.log("Errore nel caricamento dei film", err);
-        });
-    };
-
-    const getGenres = () => {
-        axios.get(`${apiUrl}/genres`)
-        .then((resp) => {
-            const fetchedGenres = resp.data.data.map(item => item.genre);
-            setAllGenres(fetchedGenres);             
-        }).catch((err) => {
-            console.log("Errore nel caricamento dei generi", err);
-        });
-    }
-
-    const getReleaseYear = () => {
-        axios.get(`${apiUrl}/release-years`)
-        .then((resp) => {
-            const fetchedyears = resp.data.data.map(item => item.release_year);
-            setAllReleaseYears(fetchedyears);             
-        }).catch((err) => {
-            console.log("Errore nel caricamento dei generi", err);
-        });
-    }
-
-    const handleGenreChange = (event) => {
-        setGenre(event.target.value);
-    };
-
-    const handleReleaseYearChange = (event) => {
-        setReleaseYear(event.target.value);
-    };
-
-    const resetFilters = () => {
-        setSearch('');
-        setGenre('all');
-        setReleaseYear('all');
-        getMovies(); // Ricarica i film senza filtri
-    };
-
-    const handleEnterKey = (event) => (event.key === "Enter") && getMovies();
-
+   
 
     return (
         <>
