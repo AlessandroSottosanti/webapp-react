@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NewMovieForm from "../components/NewMovieForm";
-import { useState } from "react";
+import { useRef, useState } from "react";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 
@@ -19,18 +19,21 @@ const NewMoviePage = () => {
 
     const [formData, setFormData] = useState(initialData);
     const [preview, setPreview] = useState(null);
-    
-      const handleChange = (e) => {
+    // per rimuovere il nome del file dall'input una volta rimosso
+    const fileInputRef = useRef(null); // Ref per l'input file
+
+
+    const handleChange = (e) => {
         const { name, value, type } = e.target;
 
-        if( type === "file"  ) {
+        if (type === "file") {
             const file = e.target.files[0];
             if (preview) {
                 URL.revokeObjectURL(preview);
-              }
+            }
 
             setFormData({ ...formData, image: file });
-            
+
             const objectUrl = URL.createObjectURL(file);
             setPreview(objectUrl);
         }
@@ -38,17 +41,17 @@ const NewMoviePage = () => {
         else {
             setFormData({ ...formData, [name]: value });
         }
-        
-      };
-    
-      const handleSubmit = (e) => {
+
+    };
+
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         console.log("Invia form:", formData);
 
         const dataToSend = new FormData();
 
-        for(let key in formData) {
+        for (let key in formData) {
             dataToSend.append(key, formData[key]);
         }
 
@@ -57,17 +60,29 @@ const NewMoviePage = () => {
                 "Content-type": "multipart/form-data",
             },
         })
-        .then((resp) => {
-            console.log(resp);
-            setFormData(initialData);
-            navigate("/movies");
-        })
-        .catch((err) => {
-            console.error(err);
-        })
-      };
+            .then((resp) => {
+                console.log(resp);
+                setFormData(initialData);
+                navigate("/movies");
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+    };
 
-    
+    const handleRemoveImage = () => {
+        if (preview) {
+            URL.revokeObjectURL(preview);
+        }
+        setFormData({ ...formData, image: initialData.image });
+        setPreview(null);
+
+        // Resetta l'input file
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
     return (
         <>
             <main>
@@ -79,11 +94,13 @@ const NewMoviePage = () => {
                 <div className="container d-flex flex-column my-4">
                     <h1>Aggiungi un nuovo film</h1>
                     <div className="container my-3">
-                        <NewMovieForm 
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        formData={formData}
-                        preview={preview}
+                        <NewMovieForm
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                            formData={formData}
+                            preview={preview}
+                            handleRemoveImage={handleRemoveImage}
+                            fileInputRef={fileInputRef}
                         />
                     </div>
                 </div>
