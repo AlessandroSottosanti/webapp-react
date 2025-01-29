@@ -5,7 +5,7 @@ import { MoviesContext } from "../contexts/MoviesContext";
 
 function MoviesPage() {
    
-    const {getMovies, getGenres, getReleaseYear, handleGenreChange, handleReleaseYearChange, resetFilters, handleEnterKey, movies, search, setSearch, genre, releaseYear, allReleaseYears, allGenres} = useContext(MoviesContext);
+    const {getMovies, getGenres, getReleaseYear, handleGenreChange, handleReleaseYearChange, resetFilters, handleEnterKey, movies, search, setSearch, genre, releaseYear, allReleaseYears, allGenres, handleDeleteMovie} = useContext(MoviesContext);
 
     useEffect(() => {
         getMovies();
@@ -52,6 +52,7 @@ function MoviesPage() {
                         <div className="col my-4" key={movie.slug}>
                             <MovieCard
                                 movie={movie}
+                                handleDeleteMovie={handleDeleteMovie}
                             />
                         </div>
                     ))

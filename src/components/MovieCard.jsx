@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-function MovieCard({ movie }) {
+function MovieCard({ movie , handleDeleteMovie}) {
     return (
         <>
             <div className="card h-100">
@@ -14,7 +14,14 @@ function MovieCard({ movie }) {
                         {movie.abstract}
                     </div>
                 </div>
-                <Link to={`${movie.slug}`} className="btn btn-primary">Dettagli</Link>
+                <div className="d-flex justify-content-evenly">
+                <Link to={`${movie.slug}`} className="btn btn-info text-white">Info</Link>
+                <Link to={`${movie.slug}/modify`} className="btn btn-warning text-white">Modifica</Link>
+                </div>
+                <div className="mt-3">
+                    <button className="btn btn-danger  w-100" onClick={() => handleDeleteMovie(movie.id)}>Elimina</button>
+                </div>
+                
             </div>
         </>
     )

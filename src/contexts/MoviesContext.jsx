@@ -70,6 +70,18 @@ const MoviesProvider = ({ children }) => {
 
     const handleEnterKey = (event) => (event.key === "Enter") && getMovies();
 
+    const handleDeleteMovie = (movie_id) => {
+        axios.delete(`${apiUrl}/movies/${movie_id}`)
+        .then((resp) => {
+            console.log(resp);
+            getMovies();
+        })
+        .catch((err) => {
+            console.error(err);
+        }
+        )
+
+    }
  
   return (
     <MoviesContext.Provider
@@ -81,6 +93,7 @@ const MoviesProvider = ({ children }) => {
             handleReleaseYearChange,
             resetFilters,
             handleEnterKey,
+            handleDeleteMovie,
             movies,
             search,
             setSearch,
