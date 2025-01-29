@@ -63,10 +63,12 @@ const NewMovieProvider = ({ children }) => {
             .then((resp) => {
                 console.log(resp);
                 setFormData(initialData);
+                alert("Film salvato con successo!");
                 navigate("/movies");
             })
             .catch((err) => {
                 console.error(err);
+                alert("Errore durante il salvataggio del film.");
             })
     };
 
