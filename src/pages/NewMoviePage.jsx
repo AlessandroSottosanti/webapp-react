@@ -50,7 +50,12 @@ const NewMoviePage = () => {
         })
         .then((resp) => {
             console.log(resp);
-        });
+            setFormData(initialData);
+            navigate("/movies");
+        })
+        .catch((err) => {
+            console.error(err);
+        })
       };
 
     

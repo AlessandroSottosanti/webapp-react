@@ -27,7 +27,7 @@ const NewMovieForm = ({ handleChange, handleSubmit, formData }) => {
                     <label htmlFor="abstract" className="form-label">Abstract</label>
                     <textarea name="abstract" className="form-control" value={formData.abstract} onChange={handleChange} required></textarea>
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Invia</button>
             </form>
         </>
     )
