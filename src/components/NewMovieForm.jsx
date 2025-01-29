@@ -1,5 +1,5 @@
 
-const NewMovieForm = ({ handleChange, handleSubmit, formData, preview, handleRemoveImage, fileInputRef }) => {
+const NewMovieForm = ({ handleChange, handleSubmit, formData, preview, handleRemoveImage, fileInputRef, handleYearChange }) => {
     return (
         <>
             <form onSubmit={handleSubmit} className="p-4 bg-dark card-no-hover">
@@ -16,8 +16,9 @@ const NewMovieForm = ({ handleChange, handleSubmit, formData, preview, handleRem
 
                 <div className="mb-3">
                     <label htmlFor="releaseYear" className="form-label">Anno d'uscita</label>
-                    <input type="number" name="releaseYear" className="form-control" value={formData.releaseYear} onChange={handleChange} required />
+                    <input type="text" name="releaseYear" className="form-control" value={formData.releaseYear} onChange={handleYearChange} maxLength="4" placeholder="Es. 2024" required />
                 </div>
+
 
                 <div className="mb-3">
                     <label htmlFor="genre" className="form-label">Genere</label>

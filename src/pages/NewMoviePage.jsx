@@ -83,6 +83,15 @@ const NewMoviePage = () => {
         }
     };
 
+    const handleYearChange = (e) => {
+        const value = e.target.value;
+      
+        // Permetti solo numeri e massimo 4 cifre
+        if (/^\d{0,4}$/.test(value)) {
+          setFormData({ ...formData, releaseYear: value });
+        }
+      };
+
     return (
         <>
             <main>
@@ -101,6 +110,7 @@ const NewMoviePage = () => {
                             preview={preview}
                             handleRemoveImage={handleRemoveImage}
                             fileInputRef={fileInputRef}
+                            handleYearChange={handleYearChange}
                         />
                     </div>
                 </div>
