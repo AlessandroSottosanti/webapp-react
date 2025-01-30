@@ -1,15 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import NewMovieForm from "../components/NewMovieForm";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { NewMovieContext } from "../contexts/NewMovieContext";
 
 
 const NewMoviePage = () => {
     const navigate = useNavigate();
 
-    
-    const {handleChange, handleSubmit, handleRemoveImage, handleYearChange, formData, preview, fileInputRef} = useContext(NewMovieContext);
 
+    const { handleChange, handleSubmit, handleRemoveImage, handleYearChange, formData, setFormData, preview, fileInputRef, initialData } = useContext(NewMovieContext);
+
+
+    useEffect(() => {
+        window.scrollTo(0, 0);  
+
+        if (formData) {
+            setFormData({
+                title: "",
+                director: "",
+                releaseYear: "",
+                genre: "",
+                abstract: "",
+                image: "",
+            });
+        }
+    }, []);
 
     return (
         <>

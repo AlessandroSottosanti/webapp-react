@@ -10,18 +10,18 @@ const NewMovieProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const initialData = {
-            title: "",
-            director: "",
-            releaseYear: "",
-            genre: "",
-            image: null,
-            abstract: "",
-        }
-    
-        const [formData, setFormData] = useState(initialData);
-        const [preview, setPreview] = useState(null);
-        // per rimuovere il nome del file dall'input una volta rimosso
-        const fileInputRef = useRef(null); // Ref per l'input file
+        title: "",
+        director: "",
+        releaseYear: "",
+        genre: "",
+        image: null,
+        abstract: "",
+    }
+
+    const [formData, setFormData] = useState(initialData);
+    const [preview, setPreview] = useState(null);
+    // per rimuovere il nome del file dall'input una volta rimosso
+    const fileInputRef = useRef(null); // Ref per l'input file
 
     const handleChange = (e) => {
         const { name, value, type } = e.target;
@@ -87,28 +87,57 @@ const NewMovieProvider = ({ children }) => {
 
     const handleYearChange = (e) => {
         const value = e.target.value;
-      
+
         // Permetti solo numeri e massimo 4 cifre
         if (/^\d{0,4}$/.test(value)) {
-          setFormData({ ...formData, releaseYear: value });
+            setFormData({ ...formData, release_year: value });
         }
-      };
+    };
 
-  return (
-    <NewMovieContext.Provider
-          value={{
-            handleChange,
-            handleSubmit,
-            handleRemoveImage,
-            handleYearChange,
-            formData,
-            preview,
-            fileInputRef
-          }}
-    >
-      {children}
-    </NewMovieContext.Provider>
-  );
+    const handleModifyMovie = (event) => {
+        event.preventDefault();
+    
+        // Creiamo una copia di formData per evitare modifiche dirette
+        const updatedMovie = { ...formData };
+    
+        if (updatedMovie.image instanceof File) {
+            updatedMovie.image = updatedMovie.image.name;
+        }
+    
+        axios.put(`${apiUrl}/movies/${updatedMovie.id}`, updatedMovie, {
+            headers: {
+                "Content-type": "multipart/form-data",
+            },
+        })
+        .then((resp) => {
+            console.log("Film modificato con successo:", resp.data);
+            alert("Film modificato con successo!");
+            navigate('movies');
+        })
+        .catch((err) => {
+            console.error("Errore nella modifica del film:", err);
+            alert("Errore durante la modifica del film.");
+        });
+    };
+
+    return (
+        <NewMovieContext.Provider
+            value={{
+                handleChange,
+                handleSubmit,
+                handleRemoveImage,
+                handleYearChange,
+                formData,
+                setFormData,
+                preview,
+                fileInputRef,
+                apiUrl,
+                handleModifyMovie,
+            }}
+        >
+            {children}
+        </NewMovieContext.Provider>
+    );
 };
 
 export { NewMovieContext, NewMovieProvider };

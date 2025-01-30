@@ -7,6 +7,7 @@ import SingleMoviePage from './pages/SingleMoviePage';
 import NewMoviePage from './pages/NewMoviePage';
 import { NewMovieProvider } from './contexts/NewMovieContext';
 import { MoviesProvider } from './contexts/MoviesContext';
+import EditMoviePage from './pages/EditMoviePage';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                 <Route path='/movies' element={<MoviesPage />} />
                 <Route path='/movies/:slug' element={<SingleMoviePage />} />
                 <Route path='/new-movie' element={<NewMoviePage />} />
+                <Route path='/edit-movie/:slug' element={<EditMoviePage />} />
               </Route>
             </Routes>
           </NewMovieProvider>

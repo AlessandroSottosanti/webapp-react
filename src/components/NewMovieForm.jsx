@@ -30,7 +30,7 @@ const NewMovieForm = ({ handleChange, handleSubmit, formData, preview, handleRem
                     <input type="file" name="image" className="form-control" ref={fileInputRef} onChange={handleChange} required />
 
                     {/* Mostra il link per scaricare l'immagine selezionata */}
-                    {(preview && formData.image) && (
+                    {(preview && formData.image.name) && (
                         <div className="mt-2">
                             <a href={preview} download={formData.image.name} className="btn btn-secondary">
                                 <i className="fa-solid fa-download"></i> {formData.image.name}

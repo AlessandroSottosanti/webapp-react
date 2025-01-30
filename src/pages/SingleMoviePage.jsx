@@ -1,86 +1,20 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect } from "react";
 import ReviewCard from "../components/ReviewCard";
-import { useNavigate } from "react-router-dom";
 import ReviewForm from "../components/ReviewForm";
+import { MoviesContext } from "../contexts/MoviesContext";
+import { useParams } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const initilaData = {
-    name: "",
-    vote: 1,
-    text: "",
-}
-
 function SingleMoviePage() {
+    
     const { slug } = useParams();
 
-    const [movie, setMovie] = useState(null);
-
-    const [formData, setFormData] = useState(initilaData)
-    const [showAlert, setShowAlert] = useState(false); 
-
-
-    const navigate = useNavigate();
-
-    const getMovieDetails = () => {
-        axios.get(`${apiUrl}/movies/${slug}`).then((resp) => {
-            setMovie(resp.data.data);
-        })
-    }
-
+    const {initilaData, movie, formData, setFormData, setShowAlert, showAlert, stars, navigate, getMovieDetails, handleChange, handleSubmit} = useContext(MoviesContext);
+  
     useEffect(() => {
-        getMovieDetails();
+        getMovieDetails(slug);
     }, []);
-
-    const stars = [];
-
-    for (let i = 1; i <= 5; i++) {
-        stars.push(i);
-    }
-
-
-    const handleChange = (event) => {
-        let { name, value } = event.target;
-        
-        if(name === "vote"){
-            value = parseInt(value);
-        }
-
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault(); // Evita il refresh della pagina
-
-        if (
-            formData.name.length <= 3 ||
-            isNaN(formData.vote) ||
-            formData.vote < 0 ||
-            formData.vote > 5 ||
-            (formData.text && formData.text.trim().length > 0 && formData.text.trim().length < 5)
-        ) {
-            setShowAlert(true); // Mostra l'alert
-            return;
-        }
-        console.log('review:', formData);
-
-        axios.post(`${apiUrl}/movies/${movie.id}`, formData)
-            .then((resp) => {
-                setFormData(initilaData);
-                getMovieDetails();
-                console.log(resp);
-                setShowAlert(false);
-            }) .catch((err) => {
-                console.error("Errore:", err);
-                setShowAlert(true);
-
-            });
-    };
 
     return (
         <>

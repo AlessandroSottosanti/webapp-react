@@ -1,9 +1,17 @@
 import { createContext, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const MoviesContext = createContext();
+
+// Film detail vuoto
+const initilaData = {
+    name: "",
+    vote: 1,
+    text: "",
+}
 
 const MoviesProvider = ({ children }) => {
     const [movies, setMovies] = useState([]);
@@ -16,6 +24,21 @@ const MoviesProvider = ({ children }) => {
     const [allGenres, setAllGenres] = useState([]);
     const [genres, setGenres] = useState([allGenres]);
     const [allReleaseYears, setAllReleaseYears] = useState([]);
+
+    // Get details
+
+    const [movie, setMovie] = useState(null);
+
+    const [formData, setFormData] = useState(initilaData)
+    const [showAlert, setShowAlert] = useState(false); 
+
+    const stars = [];
+    
+        for (let i = 1; i <= 5; i++) {
+            stars.push(i);
+        }
+    
+    // /Get details
 
     const getMovies = () => {
         // Per gestire nuovi filtri sui film sarà necessario inserirli qui, dato che il BE li gestirà dinamicamente sfruttando le Key
@@ -83,6 +106,68 @@ const MoviesProvider = ({ children }) => {
 
     }
  
+
+    // GET DETAILS FUNCS
+    
+
+        const navigate = useNavigate();
+    
+       
+
+        const getMovieDetails = (slug) => {
+            axios.get(`${apiUrl}/movies/${slug}`).then((resp) => {
+                setMovie(resp.data.data);
+                console.log(resp.data.data);
+            })
+        }
+    
+    
+        const handleChange = (event) => {
+            let { name, value } = event.target;
+            
+            if(name === "vote"){
+                value = parseInt(value);
+            }
+    
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        };
+    
+        const handleSubmit = (event) => {
+            event.preventDefault(); // Evita il refresh della pagina
+    
+            if (
+                formData.name.length <= 3 ||
+                isNaN(formData.vote) ||
+                formData.vote < 0 ||
+                formData.vote > 5 ||
+                (formData.text && formData.text.trim().length > 0 && formData.text.trim().length < 5)
+            ) {
+                setShowAlert(true); // Mostra l'alert
+                return;
+            }
+            console.log('review:', formData);
+    
+            axios.post(`${apiUrl}/movies/${movie.id}`, formData)
+                .then((resp) => {
+                    setFormData(initilaData);
+                    getMovieDetails();
+                    console.log(resp);
+                    setShowAlert(false);
+                }) .catch((err) => {
+                    console.error("Errore:", err);
+                    setShowAlert(true);
+    
+                });
+        };
+    
+        const handleModifyMovie = () => {
+            return console.log("modificato film");
+
+        }
+
   return (
     <MoviesContext.Provider
         value={{
@@ -103,6 +188,20 @@ const MoviesProvider = ({ children }) => {
             allGenres,
             genres,
             
+            // info
+            initilaData,
+            movie,
+            formData,
+            showAlert,
+            stars,
+
+            setFormData,
+            setShowAlert,
+            navigate,
+            getMovieDetails,
+            handleChange,
+            handleSubmit,
+            handleModifyMovie
         }}
     >
       {children}
